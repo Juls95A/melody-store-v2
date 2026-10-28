@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, DM_Mono, Playfair_Display } from "next/font/google";
+import AuthProvider from "@/features/auth/components/AuthProvider";
 import Navbar from "@/features/common/components/Navbar";
 import Footer from "@/features/common/components/Footer";
 import "./globals.css";
@@ -37,9 +38,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${dmMono.variable} ${cormorant.variable} ${playfair.variable} h-full antialiased`}
     >
       <body className="isolate flex min-h-full flex-col bg-negro font-mono leading-[1.6] text-marfil">
-        <Navbar />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <AuthProvider>
+          <Navbar />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </AuthProvider>
       </body>
     </html>
   );
