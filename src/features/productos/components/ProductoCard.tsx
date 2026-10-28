@@ -1,5 +1,6 @@
 import Image from "next/image";
-import type { Producto } from "../domain/producto";
+import Button from "@/features/common/components/Button";
+import { formatearPrecio, type Producto } from "../domain/producto";
 
 type ProductoCardProps = {
   producto: Producto;
@@ -7,7 +8,7 @@ type ProductoCardProps = {
 
 export default function ProductoCard({ producto }: ProductoCardProps) {
   return (
-    <article className="min-w-0 overflow-hidden border border-linea bg-tarjeta transition duration-[180ms] hover:-translate-y-1 hover:border-rojo-brillante">
+    <article className="flex min-w-0 flex-col overflow-hidden border border-linea bg-tarjeta transition duration-[180ms] hover:-translate-y-1 hover:border-rojo-brillante">
       {/* unoptimized: la imagen puede venir de cualquier URL guardada en el backend */}
       <Image
         src={producto.imagen}
@@ -22,8 +23,12 @@ export default function ProductoCard({ producto }: ProductoCardProps) {
       </h4>
       <p className="mx-4 my-[0.35rem] text-[0.63rem] text-gris">{producto.descripcion}</p>
       <p className="mx-4 mt-[0.35rem] mb-[0.65rem] text-[0.72rem] font-bold text-precio">
-        ${producto.precio.toLocaleString("es-CO")}
+        {formatearPrecio(producto.precio)}
       </p>
+      {/* Invitados y usuarios van al mismo lugar: /contacto decide si muestra el formulario */}
+      <Button href={`/contacto?producto=${producto.id}`} className="mx-4 mt-auto mb-4">
+        Solicitar
+      </Button>
     </article>
   );
 }

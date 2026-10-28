@@ -53,3 +53,8 @@ export type ConsultaProductos = Omit<FiltrosProducto, "categoria"> & {
 export function esCategoria(valor: string | null): valor is Categoria {
   return CATEGORIAS.some((categoria) => categoria === valor);
 }
+
+// Precio en pesos con separador de miles colombiano: $1.299.000
+export function formatearPrecio(valor: number): string {
+  return `$${valor.toLocaleString("es-CO")}`;
+}
