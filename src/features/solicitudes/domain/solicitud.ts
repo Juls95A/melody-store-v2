@@ -58,46 +58,38 @@ export type CrearSolicitudRequest = {
 
 export const CANTIDAD_MAXIMA = 10;
 
-// Valores del formulario de pedido, tal como se escriben en los campos
-export type FormularioPedido = {
-  productoId: string;
-  cantidad: string;
+// Datos de envío del pedido, tal como se escriben en los campos; son los mismos para todos los productos de la canasta
+export type DatosEnvio = {
   telefono: string;
-  asunto: string;
   direccionEnvio: string;
   ciudad: string;
   metodoPago: string;
   mensaje: string;
 };
 
-export type ErroresPedido = Partial<Record<keyof FormularioPedido, string>>;
+export type ErroresEnvio = Partial<Record<keyof DatosEnvio, string>>;
+
+export const DATOS_ENVIO_VACIOS: DatosEnvio = {
+  telefono: "",
+  direccionEnvio: "",
+  ciudad: "",
+  metodoPago: "",
+  mensaje: "",
+};
 
 const PATRON_TELEFONO = /^[+\d][\d\s()-]{6,}$/;
 const OBLIGATORIO = "Este campo es obligatorio.";
 
-// Cantidad entera entre 1 y 10, o null si no es válida
-export function leerCantidad(valor: string): number | null {
-  const cantidad = Number(valor);
-  return Number.isInteger(cantidad) && cantidad >= 1 && cantidad <= CANTIDAD_MAXIMA ? cantidad : null;
-}
-
 // Mismas reglas que el formulario original y el backend
-export function validarPedido(datos: FormularioPedido): ErroresPedido {
-  const errores: ErroresPedido = {};
+export function validarEnvio(datos: DatosEnvio): ErroresEnvio {
+  const errores: ErroresEnvio = {};
   const telefono = datos.telefono.trim();
   const direccion = datos.direccionEnvio.trim();
   const ciudad = datos.ciudad.trim();
   const mensaje = datos.mensaje.trim();
 
-  if (!datos.productoId) errores.productoId = "Selecciona un producto.";
-
-  if (!datos.cantidad.trim()) errores.cantidad = OBLIGATORIO;
-  else if (leerCantidad(datos.cantidad) === null) errores.cantidad = `La cantidad debe ser un número entre 1 y ${CANTIDAD_MAXIMA}.`;
-
   if (!telefono) errores.telefono = OBLIGATORIO;
   else if (!PATRON_TELEFONO.test(telefono)) errores.telefono = "Escribe un teléfono válido.";
-
-  if (!datos.asunto.trim()) errores.asunto = "El asunto es obligatorio.";
 
   if (!direccion) errores.direccionEnvio = OBLIGATORIO;
   else if (direccion.length < 5) errores.direccionEnvio = "La dirección de envío debe tener al menos 5 caracteres.";
@@ -113,18 +105,21 @@ export function validarPedido(datos: FormularioPedido): ErroresPedido {
   return errores;
 }
 
-// Convierte el formulario (ya validado) en el cuerpo que espera la API
-export function aCrearSolicitud(datos: FormularioPedido): CrearSolicitudRequest {
-  const mensaje = datos.mensaje.trim();
+// Cuerpo que espera la API para un producto de la canasta (los datos de envío ya validados)
+export function aCrearSolicitud(
+  item: { productoId: number; nombre: string; cantidad: number },
+  envio: DatosEnvio
+): CrearSolicitudRequest {
+  const mensaje = envio.mensaje.trim();
   return {
-    productoId: Number(datos.productoId),
-    cantidad: Number(datos.cantidad),
-    telefono: datos.telefono.trim(),
-    asunto: datos.asunto.trim(),
+    productoId: item.productoId,
+    cantidad: item.cantidad,
+    telefono: envio.telefono.trim(),
+    asunto: `Pedido de ${item.nombre}`,
     mensaje: mensaje || undefined,
-    direccionEnvio: datos.direccionEnvio.trim(),
-    ciudad: datos.ciudad.trim(),
-    metodoPago: datos.metodoPago as MetodoPago,
+    direccionEnvio: envio.direccionEnvio.trim(),
+    ciudad: envio.ciudad.trim(),
+    metodoPago: envio.metodoPago as MetodoPago,
   };
 }
 

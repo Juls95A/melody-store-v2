@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { useAuth } from "@/features/auth/hooks/useAuth";
+import { useCanasta } from "@/features/solicitudes/hooks/useCanasta";
 
 const enlaces = [
   { href: "/", texto: "Inicio" },
@@ -19,6 +20,7 @@ const estiloEnlace =
 export default function Navbar() {
   const [abierto, setAbierto] = useState(false);
   const { user, loading, logout } = useAuth();
+  const { totalItems } = useCanasta();
 
   const cerrarMenu = () => setAbierto(false);
 
@@ -76,6 +78,17 @@ export default function Navbar() {
                 </Link>
               </li>
             ))}
+            {/* Visible para todos: la canasta no necesita sesión */}
+            <li>
+              <Link
+                href="/canasta"
+                className={estiloEnlace}
+                aria-label={`Canasta, ${totalItems} ${totalItems === 1 ? "producto" : "productos"}`}
+                onClick={cerrarMenu}
+              >
+                Canasta ({totalItems})
+              </Link>
+            </li>
           </ul>
 
           {!loading && (
