@@ -1,34 +1,39 @@
 "use client";
 
-import { useState, type KeyboardEvent } from "react";
-import AdminProductos from "@/features/productos/components/AdminProductos";
-import AdminSolicitudes from "@/features/solicitudes/components/AdminSolicitudes";
+import { useState, type KeyboardEvent, type ReactNode } from "react";
 
-const pestanas = [
-  { id: "productos", texto: "Productos" },
-  { id: "solicitudes", texto: "Solicitudes" },
-] as const;
+type Pestana = {
+  id: string;
+  texto: string;
+  contenido: ReactNode;
+};
 
-type Pestana = (typeof pestanas)[number]["id"];
+type PestanasProps = {
+  etiqueta: string;
+  pestanas: Pestana[];
+};
 
-export default function PanelAdmin() {
-  const [activa, setActiva] = useState<Pestana>("productos");
+export default function Pestanas({ etiqueta, pestanas }: PestanasProps) {
+  const [activa, setActiva] = useState(pestanas[0]?.id);
+  const actual = pestanas.find((pestana) => pestana.id === activa) ?? pestanas[0];
 
   // Flechas izquierda/derecha para moverse entre pestañas, como pide el patrón de tabs accesibles
   function moverConTeclado(evento: KeyboardEvent<HTMLDivElement>) {
     if (evento.key !== "ArrowRight" && evento.key !== "ArrowLeft") return;
-    const indice = pestanas.findIndex((pestana) => pestana.id === activa);
+    const indice = pestanas.findIndex((pestana) => pestana.id === actual?.id);
     const paso = evento.key === "ArrowRight" ? 1 : -1;
     const siguiente = pestanas[(indice + paso + pestanas.length) % pestanas.length];
     setActiva(siguiente.id);
     document.getElementById(`pestana-${siguiente.id}`)?.focus();
   }
 
+  if (!actual) return null;
+
   return (
     <div className="mt-8">
-      <div role="tablist" aria-label="Secciones de administración" className="flex border-b border-linea" onKeyDown={moverConTeclado}>
+      <div role="tablist" aria-label={etiqueta} className="flex border-b border-linea" onKeyDown={moverConTeclado}>
         {pestanas.map((pestana) => {
-          const seleccionada = pestana.id === activa;
+          const seleccionada = pestana.id === actual.id;
           return (
             <button
               key={pestana.id}
@@ -51,8 +56,8 @@ export default function PanelAdmin() {
         })}
       </div>
 
-      <div id={`panel-${activa}`} role="tabpanel" aria-labelledby={`pestana-${activa}`} className="pt-6">
-        {activa === "productos" ? <AdminProductos /> : <AdminSolicitudes />}
+      <div id={`panel-${actual.id}`} role="tabpanel" aria-labelledby={`pestana-${actual.id}`} className="pt-6">
+        {actual.contenido}
       </div>
     </div>
   );

@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
-import PanelAdmin from "@/features/admin/components/PanelAdmin";
 import RutaProtegida from "@/features/auth/components/RutaProtegida";
+import Pestanas from "@/features/common/components/Pestanas";
 import SectionTitle from "@/features/common/components/SectionTitle";
+import AdminProductos from "@/features/productos/components/AdminProductos";
+import AdminSolicitudes from "@/features/solicitudes/components/AdminSolicitudes";
 
 export const metadata: Metadata = {
   title: "Administración",
@@ -13,7 +15,13 @@ export default function AdminPage() {
       <RutaProtegida soloAdmin>
         <SectionTitle>Administración</SectionTitle>
         <p className="max-w-[620px] text-[0.73rem] text-gris">Gestiona el catálogo y los pedidos de Melody Store.</p>
-        <PanelAdmin />
+        <Pestanas
+          etiqueta="Secciones de administración"
+          pestanas={[
+            { id: "productos", texto: "Productos", contenido: <AdminProductos /> },
+            { id: "solicitudes", texto: "Solicitudes", contenido: <AdminSolicitudes /> },
+          ]}
+        />
       </RutaProtegida>
     </section>
   );

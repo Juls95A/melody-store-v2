@@ -12,6 +12,14 @@ export const NOMBRES_CATEGORIA: Record<Categoria, string> = {
   accesorios: "Accesorios",
 };
 
+// Imagen de cada categoría en /instrumentos, igual que en instrumentos.html (accesorios no tenía)
+export const IMAGENES_CATEGORIA: Partial<Record<Categoria, { src: string; alt: string }>> = {
+  guitarras: { src: "/img/guitarras.png", alt: "Guitarra acústica" },
+  bajos: { src: "/img/bajos.png", alt: "Bajo eléctrico" },
+  teclados: { src: "/img/teclado_electronico.png", alt: "Teclado electrónico" },
+  baterias: { src: "/img/baterias.png", alt: "Batería acústica" },
+};
+
 export type Producto = {
   id: number;
   nombre: string;

@@ -4,6 +4,7 @@ import type { FormEvent } from "react";
 import Button from "@/features/common/components/Button";
 import Input from "@/features/common/components/Input";
 import { NOMBRES_CATEGORIA, type Categoria, type FiltrosProducto } from "../domain/producto";
+import CategoriasDestacadas from "./CategoriasDestacadas";
 
 type FiltrosProductosProps = {
   categorias: Categoria[];
@@ -64,6 +65,8 @@ export default function FiltrosProductos({ categorias, filtros, onCambiar }: Fil
           ))}
         </div>
       )}
+
+      <CategoriasDestacadas categorias={categorias} activa={filtros.categoria} onElegir={elegirCategoria} />
 
       {/* key: si la URL cambia (ej: botón atrás) el formulario se reinicia con los valores nuevos */}
       <form
