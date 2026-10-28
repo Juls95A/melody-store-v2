@@ -22,6 +22,7 @@ export default function Catalogo({ categorias }: CatalogoProps) {
     <>
       <FiltrosProductos categorias={categorias} filtros={filtros} onCambiar={navegar} />
       <ListadoProductos
+        categorias={categorias}
         filtros={{ ...filtros, categoria, limit: POR_PAGINA }}
         onCambiarPagina={(page) => navegar({ ...filtros, page })}
       />
