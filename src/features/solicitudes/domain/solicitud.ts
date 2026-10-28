@@ -8,6 +8,10 @@ export const NOMBRES_ESTADO: Record<EstadoSolicitud, string> = {
   cancelada: "Cancelada",
 };
 
+export function esEstadoSolicitud(valor: string): valor is EstadoSolicitud {
+  return ESTADOS_SOLICITUD.some((estado) => estado === valor);
+}
+
 // Solo la opción elegida: nunca se piden ni se guardan datos de tarjeta
 export const METODOS_PAGO = ["contra_entrega", "transferencia", "tarjeta_al_recibir"] as const;
 

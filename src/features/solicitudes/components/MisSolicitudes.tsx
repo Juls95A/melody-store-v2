@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useAuth } from "@/features/auth/hooks/useAuth";
 import Button from "@/features/common/components/Button";
 import Pagination from "@/features/common/components/Pagination";
 import { useMisSolicitudes } from "../hooks/useMisSolicitudes";
@@ -9,7 +8,8 @@ import SolicitudCard from "./SolicitudCard";
 
 const estiloMensaje = "mt-6 text-[0.73rem] text-gris";
 
-function ListaSolicitudes() {
+// La sesión la garantiza RutaProtegida en la página
+export default function MisSolicitudes() {
   const [pagina, setPagina] = useState(1);
   const { loading, data, error, reintentar, eliminar } = useMisSolicitudes(pagina);
 
@@ -68,28 +68,4 @@ function ListaSolicitudes() {
       <Pagination pagina={data.pagination.page} totalPaginas={data.pagination.totalPages} onCambiar={setPagina} />
     </>
   );
-}
-
-export default function MisSolicitudes() {
-  const { user, loading } = useAuth();
-
-  if (loading) {
-    return (
-      <p className={estiloMensaje} role="status">
-        Cargando...
-      </p>
-    );
-  }
-
-  // La protección real de la ruta llega en F5; mientras tanto no se pide nada sin sesión
-  if (!user) {
-    return (
-      <div className="mt-6 flex flex-col gap-4">
-        <p className="text-[0.73rem] text-gris">Inicia sesión para ver tus solicitudes.</p>
-        <Button href="/login">Ingresar</Button>
-      </div>
-    );
-  }
-
-  return <ListaSolicitudes />;
 }
