@@ -76,15 +76,7 @@ Un ejemplo real: un DELETE a /api/productos/1 sin token da 401. La misma petici�
 
 ### Uso de IA
 
-Usé Claude Code para ir generando el código por pasos: primero el backend y luego el frontend. Después de cada paso lo probaba y hacía commit. Cosas que tuve que corregir o decidir:
-
-- El backend estaba en el puerto 3000 y chocaba con Next.js, así que lo pasé al 4000.
-- La URL que me dio Neon traía -pooler y channel_binding, y tuve que quitarlos para que Prisma funcionara. Tampoco usé el prompt automático que da Neon, porque podía conectar la base sin Prisma.
-- Al principio la IA tomó colores verde y naranja del CSS, pero mi sitio de la Entrega 1 en realidad se ve negro y rojo, así que lo cambié.
-- La paginación no se notaba porque tengo pocos productos por categoría. Agregué al backend el filtro de varias categorías y dejé 4 productos por página.
-- El catálogo había perdido las secciones por categoría del original, y las volví a poner.
-- Pedí agregar una canasta para comprar varios productos, con dirección de envío y método de pago, sin guardar datos de tarjeta.
-- En Windows me salió un error EPERM con la carpeta .next porque había dos servidores de Next abiertos a la vez. Lo arreglé borrando .next y corriendo uno solo.
+Usé Claude Code como apoyo: me dio guías para poder conectar las cosas (backend, frontend y base de datos).
 
 
 ## Captura de Network
