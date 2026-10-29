@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Melody Store
 
-## Getting Started
+Este es el frontend de mi tienda de instrumentos musicales, la Entrega 3 de Desarrollo Web. Pasé mi sitio de la Entrega 1, que estaba hecho con HTML, CSS y JS, a Next.js. Mantuve los textos, las imágenes y el estilo negro y rojo que ya tenía.
 
-First, run the development server:
+- Sitio: https://melody-store-v2.vercel.app
+- API: https://melody-store-api.onrender.com
+- Backend: https://github.com/Juls95A/melody-store-api
+
+## Qué usé
+
+Next.js (App Router), TypeScript y Tailwind.
+
+## Cómo está organizado
+
+En `app/` están las páginas, y cada una solo arma la vista con componentes. La lógica está en `src/features`, separada en `common`, `auth`, `productos` y `solicitudes`. Cada feature tiene sus componentes, hooks, services y tipos. Decidí que ningún componente use `fetch` directo: todo pasa por `http.ts`, después por los services y por último por los hooks.
+
+## Qué se puede hacer
+
+Se puede ver el catálogo por categorías, con paginación y filtros, y agregar productos a la canasta. Desde la canasta se hace el pedido con dirección de envío y método de pago, y después se puede ver en Mis solicitudes. El admin puede crear, editar y eliminar productos, y cambiar el estado de los pedidos.
+
+## Páginas
+
+| Ruta | Quién puede entrar |
+| --- | --- |
+| `/` | Todos |
+| `/instrumentos` | Todos |
+| `/accesorios` | Todos |
+| `/nosotros` | Todos |
+| `/contacto` | Todos |
+| `/canasta` | Todos (para hacer el pedido hay que iniciar sesión) |
+| `/login` | Solo sin sesión |
+| `/registro` | Solo sin sesión |
+| `/mis-solicitudes` | Usuarios con sesión |
+| `/admin` | Solo admin |
+
+## Correrlo en local
 
 ```bash
+npm install
+echo "NEXT_PUBLIC_API_HOST=http://localhost:4000" > .env.local
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+El backend tiene que estar corriendo en el puerto 4000 para que funcione.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Usuarios de prueba
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Admin: `admin@melodystore.com` / `Admin123*`
+- Usuario: `user@melodystore.com` / `User123*`
 
-## Learn More
+Estos usuarios son solo para la entrega.
 
-To learn more about Next.js, take a look at the following resources:
+## Despliegue
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Lo subí a Vercel con auto-deploy desde `main`. En Vercel configuré `NEXT_PUBLIC_API_HOST` apuntando a la API en Render.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Decisiones técnicas
 
-## Deploy on Vercel
+### Flujo de un login
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Dónde guardo el token y qué riesgo tiene
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Cuándo responde 401 y cuándo 403
+
+### Uso de IA
+
+## Captura de Network
+
+![Captura de Network](melody-store.png)
